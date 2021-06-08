@@ -1,8 +1,10 @@
 import pygame
 
 WIDTH, HEIGHT = 1000, 800
+ICON = pygame.image.load("ICON.ico")
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DiscordClicker")
+pygame.display.set_icon(ICON)
 
 
 class Main:
