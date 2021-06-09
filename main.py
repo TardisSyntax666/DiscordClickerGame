@@ -16,16 +16,27 @@ CLICKER_IMAGE = pygame.image.load(os.path.join('assets', 'DiscordClicker_asset_M
 CLICKER_IMAGE = pygame.transform.smoothscale(CLICKER_IMAGE, CLICKER_IMAGE_SIZE)
 CLICKER_BUTTON_LOCATION = (400, 200)
 
+BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
+SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'shadow.png')).convert_alpha()
+SHADOW_IMAGE = pygame.transform.smoothscale(SHADOW_IMAGE, (210, 210))
+NOT_SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'not_shadow.png')).convert_alpha()
+NOT_SHADOW_IMAGE = pygame.transform.smoothscale(NOT_SHADOW_IMAGE, (210, 210))
+
 members = 0
+buttonlist = []
 
 
 class ClickerButton:
 
-    def __init__(self, size, pos):
+    def __init__(self, size, pos, button_surface, shadow_surface, not_shadow_surface):
         self.width = size[0]
         self.height = size[1]
         self.x = pos[0]
         self.y = pos[1]
+        self.surface = button_surface
+        self.shadow = shadow_surface
+        self.not_shadow = not_shadow_surface
+        self.current_shadow = self.shadow
 
     def is_over(self, pos):
         if self.x < pos[0] < self.x + self.width:
@@ -33,12 +44,16 @@ class ClickerButton:
                 return True
 
 
-CLICKER_BUTTON = ClickerButton(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION)
+CLICKER_BUTTON = ClickerButton(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION,
+                               CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
+buttonlist.append(CLICKER_BUTTON)
 
 
-def window_draw():
-    WINDOW.fill(WHITE)
-    WINDOW.blit(CLICKER_IMAGE, CLICKER_BUTTON_LOCATION)
+def window_draw(buttonlist):
+    WINDOW.blit(BACKGROUND_IMAGE, (0, 0))
+    for button in buttonlist:
+        WINDOW.blit(button.current_shadow, (button.x - 5, button.y - 5))
+        WINDOW.blit(button.surface, (button.x, button.y))
     pygame.display.update()
 
 
@@ -47,8 +62,8 @@ def main(members):
     run = True
     while run:
         clock.tick(FPS)
+        pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
-            pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -56,7 +71,13 @@ def main(members):
                     members += 1
                     print(members)
 
-        window_draw()
+        for button in buttonlist:
+            if button.is_over(pos):
+                button.current_shadow = button.not_shadow
+            else:
+                button.current_shadow = button.shadow
+
+        window_draw(buttonlist)
 
     pygame.quit()
     quit()
