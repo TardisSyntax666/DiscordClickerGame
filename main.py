@@ -14,6 +14,7 @@ pygame.display.set_icon(ICON)
 
 WHITE = (255, 255, 255)
 FONT = pygame.font.SysFont(os.path.join('assets', 'Caramel Sweets.ttf'), 50)
+SMALL_FONT = pygame.font.SysFont(os.path.join('assets', 'Caramel Sweets.ttf'), 30)
 
 FPS = 60
 
@@ -55,7 +56,11 @@ def window_draw(buttonlist, textlist):
     for text in textlist:
         textobj = text[0]
         text_pos = text[1]
-        WINDOW.blit(textobj, (text_pos[0] - (textobj.get_rect().size[0]) / 2, text_pos[1]))
+        is_middle = text[2]
+        if is_middle:
+            WINDOW.blit(textobj, (text_pos[0] - (textobj.get_rect().size[0]) / 2, text_pos[1]))
+        else:
+            WINDOW.blit(textobj, (text_pos[0], text_pos[1]))
     pygame.display.update()
 
 
@@ -67,7 +72,8 @@ def main():
     button_list = []
     generator_list = []
 
-    clicker_button = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION, CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
+    clicker_button = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION, CLICKER_IMAGE, SHADOW_IMAGE,
+                              NOT_SHADOW_IMAGE)
     tier_one_button = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
     tier_two_button = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
     tier_three_button = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
@@ -103,10 +109,9 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if clicker_button.is_over(pos):
+                if button_list[0].is_over(pos):
                     members += 1
-                    print(members)
-                if tier_one_button.is_over(pos):
+                if button_list[1].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_one_button.locked:
                         if generator_list[0].cost <= members:
@@ -115,51 +120,67 @@ def main():
                             print("Add a text channel")
                         else:
                             print(f"this costs {generator_list[0].cost}")
-                if tier_two_button.is_over(pos):
+                if button_list[2].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_two_button.locked:
                         print("Add a voice channel")
-                if tier_three_button.is_over(pos):
+                if button_list[3].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_three_button.locked:
                         print("Add a role")
-                if tier_four_button.is_over(pos):
+                if button_list[4].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_four_button.locked:
                         print("Add a bot")
-                if tier_five_button.is_over(pos):
+                if button_list[5].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_five_button.locked:
                         print("Heir an admin")
-                if tier_six_button.is_over(pos):
+                if button_list[6].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_six_button.locked:
                         print("Ban a trouble maker")
-                if tier_seven_button.is_over(pos):
+                if button_list[7].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_seven_button.locked:
                         print("Get mentioned by an Influencer")
-                if tier_eight_button.is_over(pos):
+                if button_list[8].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_eight_button.locked:
                         print("Add a pay to win role")
-                if tier_nine_button.is_over(pos):
+                if button_list[9].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_nine_button.locked:
                         print("Hack discord for members")
-                if tier_ten_button.is_over(pos):
+                if button_list[10].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_ten_button.locked:
                         print("Get god to bless server")
-        if members >= 10 and tier_one_button.locked:
-            tier_one_button.unlock()
+        if members >= 10 and button_list[1].locked:
+            button_list[1].unlock()
+        if generator_list[0].owned >= 10 and button_list[2].locked:
+            button_list[2].unlock()
 
-        per_second_counter += 1
-        if per_second_counter == 60:
-            per_second_counter = 0
-            for gen in generator_list:
-                if gen.owned >= 1:
+        textlist = []
+
+        for gen in generator_list:
+            if gen.owned >= 1:
+                per_second_counter += 1
+                if per_second_counter == 60:
+                    per_second_counter = 0
                     members += gen.production
+            button_num = generator_list.index(gen) + 1
+            button = button_list[button_num]
+            if not button.locked:
+                gen_cost_label_surface = SMALL_FONT.render("Cost: {:,}".format(gen.cost), False, WHITE)
+                gen_product_label_surface = SMALL_FONT.render("Revenue: {:,}".format(gen.production), False, WHITE)
+                gen_owned_label_surface = SMALL_FONT.render("Owned: {:,}".format(gen.owned), False, WHITE)
+                cost_label = (gen_cost_label_surface, (120, 32), False)
+                product_label = (gen_product_label_surface, (120, 58), False)
+                owned_label = (gen_owned_label_surface, (120, 84), False)
+                textlist.append(cost_label)
+                textlist.append(product_label)
+                textlist.append(owned_label)
 
         for button in button_list:
             if button.is_over(pos):
@@ -186,12 +207,11 @@ def main():
                     button.current_y = button.y
                     button.is_pressed = False
 
-        textlist = []
         members_text_surface = FONT.render("{:,}".format(members), False, WHITE)
-        main_counter = (members_text_surface, (500, 650))
+        main_counter = (members_text_surface, (500, 650), True)
 
         label_surface = FONT.render("Server Member Count:", False, WHITE)
-        main_counter_label = (label_surface, (500, 610))
+        main_counter_label = (label_surface, (500, 610), True)
 
         textlist.append(main_counter)
         textlist.append(main_counter_label)

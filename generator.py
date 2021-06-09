@@ -11,7 +11,7 @@ class Generator:
         self.starting_rev = starting_rev
         self.owned = 0
         self.cost = int(self.starting_cost)
-        self.production = int(self.starting_product)
+        self.production = 0
 
     def upgrade(self):
         self.owned += 1
