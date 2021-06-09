@@ -1,5 +1,6 @@
 import pygame
 import button as b
+import generator as g
 import os
 
 pygame.font.init()
@@ -62,7 +63,9 @@ def main():
     clock = pygame.time.Clock()
     run = True
     members = 0
-    buttonlist = []
+    per_second_counter = 0
+    button_list = []
+    generator_list = []
 
     clicker_button = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION, CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
     tier_one_button = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
@@ -76,17 +79,21 @@ def main():
     tier_nine_button = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
     tier_ten_button = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
 
-    buttonlist.append(clicker_button)
-    buttonlist.append(tier_one_button)
-    buttonlist.append(tier_two_button)
-    buttonlist.append(tier_three_button)
-    buttonlist.append(tier_four_button)
-    buttonlist.append(tier_five_button)
-    buttonlist.append(tier_six_button)
-    buttonlist.append(tier_seven_button)
-    buttonlist.append(tier_eight_button)
-    buttonlist.append(tier_nine_button)
-    buttonlist.append(tier_ten_button)
+    tier_one_gen = g.Generator(10, 1.67, 1.07, 1)
+
+    button_list.append(clicker_button)
+    button_list.append(tier_one_button)
+    button_list.append(tier_two_button)
+    button_list.append(tier_three_button)
+    button_list.append(tier_four_button)
+    button_list.append(tier_five_button)
+    button_list.append(tier_six_button)
+    button_list.append(tier_seven_button)
+    button_list.append(tier_eight_button)
+    button_list.append(tier_nine_button)
+    button_list.append(tier_ten_button)
+
+    generator_list.append(tier_one_gen)
 
     while run:
         clock.tick(FPS)
@@ -102,7 +109,12 @@ def main():
                 if tier_one_button.is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_one_button.locked:
-                        print("Add a text channel")
+                        if generator_list[0].cost <= members:
+                            members -= generator_list[0].cost
+                            generator_list[0].upgrade()
+                            print("Add a text channel")
+                        else:
+                            print(f"this costs {generator_list[0].cost}")
                 if tier_two_button.is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_two_button.locked:
@@ -142,7 +154,14 @@ def main():
         if members >= 10 and tier_one_button.locked:
             tier_one_button.unlock()
 
-        for button in buttonlist:
+        per_second_counter += 1
+        if per_second_counter == 60:
+            per_second_counter = 0
+            for gen in generator_list:
+                if gen.owned >= 1:
+                    members += gen.production
+
+        for button in button_list:
             if button.is_over(pos):
                 button.current_shadow = button.not_shadow
                 if mouse_button_state[0]:
@@ -168,7 +187,7 @@ def main():
                     button.is_pressed = False
 
         textlist = []
-        members_text_surface = FONT.render(str(members), False, WHITE)
+        members_text_surface = FONT.render("{:,}".format(members), False, WHITE)
         main_counter = (members_text_surface, (500, 650))
 
         label_surface = FONT.render("Server Member Count:", False, WHITE)
@@ -177,7 +196,7 @@ def main():
         textlist.append(main_counter)
         textlist.append(main_counter_label)
 
-        window_draw(buttonlist, textlist)
+        window_draw(button_list, textlist)
 
     pygame.quit()
     quit()
