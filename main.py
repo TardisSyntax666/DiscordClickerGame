@@ -2,6 +2,8 @@ import pygame
 import button as b
 import os
 
+pygame.init()
+
 WIDTH, HEIGHT = 1000, 800
 ICON = pygame.image.load("ICON.ico")
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -9,6 +11,7 @@ pygame.display.set_caption("DiscordClicker")
 pygame.display.set_icon(ICON)
 
 WHITE = (255, 255, 255)
+FONT = pygame.font.SysFont(os.path.join('assets', 'Caramel Sweets.ttf'), 50)
 
 FPS = 60
 
@@ -16,12 +19,13 @@ CLICKER_IMAGE_SIZE = (200, 200)
 CLICKER_IMAGE = pygame.image.load(os.path.join('assets', 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
 CLICKER_IMAGE = pygame.transform.smoothscale(CLICKER_IMAGE, CLICKER_IMAGE_SIZE)
 CLICKER_BUTTON_LOCATION = (400, 200)
-
-BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
 SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'shadow.png')).convert_alpha()
 SHADOW_IMAGE = pygame.transform.smoothscale(SHADOW_IMAGE, (210, 210))
 NOT_SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'not_shadow.png')).convert_alpha()
 NOT_SHADOW_IMAGE = pygame.transform.smoothscale(NOT_SHADOW_IMAGE, (210, 210))
+
+BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
+INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
 
 members = 0
 buttonlist = []
@@ -32,8 +36,12 @@ CLICKER_BUTTON = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION,
 buttonlist.append(CLICKER_BUTTON)
 
 
-def window_draw(buttonlist):
+def window_draw(buttonlist, members_text):
     WINDOW.blit(BACKGROUND_IMAGE, (0, 0))
+    WINDOW.blit(INFO_BAR_IMAGE, (0, 600))
+    WINDOW.blit(members_text, (500-(members_text.get_rect().size[0])/2, 650))
+    label = FONT.render("Server Member Count:", False, WHITE)
+    WINDOW.blit(label, (500-(label.get_rect().size[0])/2, 610))
     for button in buttonlist:
         WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
         WINDOW.blit(button.current_surface, (button.current_x, button.current_y))
@@ -80,7 +88,9 @@ def main(members):
                     button.current_y = button.y
                     button.is_pressed = False
 
-        window_draw(buttonlist)
+        members_text_surface = FONT.render(str(members), False, WHITE)
+
+        window_draw(buttonlist, members_text_surface)
 
     pygame.quit()
     quit()
