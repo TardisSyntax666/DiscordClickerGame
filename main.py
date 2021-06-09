@@ -2,7 +2,8 @@ import pygame
 import button as b
 import os
 
-pygame.init()
+pygame.font.init()
+pygame.mixer.init()
 
 WIDTH, HEIGHT = 1000, 800
 ICON = pygame.image.load("ICON.ico")
@@ -39,36 +40,9 @@ TIER_SHADOW = pygame.image.load(os.path.join('assets', 'tier_shadow.png')).conve
 TIER_NOT_SHADOW = pygame.image.load(os.path.join('assets', 'tier_not_shadow.png')).convert_alpha()
 TIER_LOCKED = pygame.image.load(os.path.join('assets', 'tier_locked.png')).convert_alpha()
 
+BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join('assets', 'click_sound.wav'))
 BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
 INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
-
-members = 0
-buttonlist = []
-
-CLICKER_BUTTON = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION,
-                          CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
-TIER_ONE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_TWO_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_THREE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_FOUR_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 363), TIER_FOUR, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_FIVE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 479), TIER_FIVE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_SIX_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 16), TIER_SIX, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_SEVEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 131), TIER_SEVEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_EIGHT_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 247), TIER_EIGHT, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_NINE_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-TIER_TEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
-
-buttonlist.append(CLICKER_BUTTON)
-buttonlist.append(TIER_ONE_BUTTON)
-buttonlist.append(TIER_TWO_BUTTON)
-buttonlist.append(TIER_THREE_BUTTON)
-buttonlist.append(TIER_FOUR_BUTTON)
-buttonlist.append(TIER_FIVE_BUTTON)
-buttonlist.append(TIER_SIX_BUTTON)
-buttonlist.append(TIER_SEVEN_BUTTON)
-buttonlist.append(TIER_EIGHT_BUTTON)
-buttonlist.append(TIER_NINE_BUTTON)
-buttonlist.append(TIER_TEN_BUTTON)
 
 
 def window_draw(buttonlist, textlist):
@@ -84,9 +58,36 @@ def window_draw(buttonlist, textlist):
     pygame.display.update()
 
 
-def main(members):
+def main():
     clock = pygame.time.Clock()
     run = True
+    members = 0
+    buttonlist = []
+
+    clicker_button = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION, CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
+    tier_one_button = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_two_button = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_three_button = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_four_button = b.Button(TIER_IMAGE_SIZE, (10, 363), TIER_FOUR, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_five_button = b.Button(TIER_IMAGE_SIZE, (10, 479), TIER_FIVE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_six_button = b.Button(TIER_IMAGE_SIZE, (890, 16), TIER_SIX, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_seven_button = b.Button(TIER_IMAGE_SIZE, (890, 131), TIER_SEVEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_eight_button = b.Button(TIER_IMAGE_SIZE, (890, 247), TIER_EIGHT, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_nine_button = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+    tier_ten_button = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+
+    buttonlist.append(clicker_button)
+    buttonlist.append(tier_one_button)
+    buttonlist.append(tier_two_button)
+    buttonlist.append(tier_three_button)
+    buttonlist.append(tier_four_button)
+    buttonlist.append(tier_five_button)
+    buttonlist.append(tier_six_button)
+    buttonlist.append(tier_seven_button)
+    buttonlist.append(tier_eight_button)
+    buttonlist.append(tier_nine_button)
+    buttonlist.append(tier_ten_button)
+
     while run:
         clock.tick(FPS)
         pos = pygame.mouse.get_pos()
@@ -95,41 +96,51 @@ def main(members):
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if CLICKER_BUTTON.is_over(pos):
+                if clicker_button.is_over(pos):
                     members += 1
                     print(members)
-                if TIER_ONE_BUTTON.is_over(pos):
-                    if not TIER_ONE_BUTTON.locked:
+                if tier_one_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_one_button.locked:
                         print("Add a text channel")
-                if TIER_TWO_BUTTON.is_over(pos):
-                    if not TIER_TWO_BUTTON.locked:
+                if tier_two_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_two_button.locked:
                         print("Add a voice channel")
-                if TIER_THREE_BUTTON.is_over(pos):
-                    if not TIER_THREE_BUTTON.locked:
+                if tier_three_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_three_button.locked:
                         print("Add a role")
-                if TIER_FOUR_BUTTON.is_over(pos):
-                    if not TIER_FOUR_BUTTON.locked:
+                if tier_four_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_four_button.locked:
                         print("Add a bot")
-                if TIER_FIVE_BUTTON.is_over(pos):
-                    if not TIER_FIVE_BUTTON.locked:
+                if tier_five_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_five_button.locked:
                         print("Heir an admin")
-                if TIER_SIX_BUTTON.is_over(pos):
-                    if not TIER_SIX_BUTTON.locked:
+                if tier_six_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_six_button.locked:
                         print("Ban a trouble maker")
-                if TIER_SEVEN_BUTTON.is_over(pos):
-                    if not TIER_SEVEN_BUTTON.locked:
+                if tier_seven_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_seven_button.locked:
                         print("Get mentioned by an Influencer")
-                if TIER_EIGHT_BUTTON.is_over(pos):
-                    if not TIER_EIGHT_BUTTON.locked:
+                if tier_eight_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_eight_button.locked:
                         print("Add a pay to win role")
-                if TIER_NINE_BUTTON.is_over(pos):
-                    if not TIER_NINE_BUTTON.locked:
+                if tier_nine_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_nine_button.locked:
                         print("Hack discord for members")
-                if TIER_TEN_BUTTON.is_over(pos):
-                    if not TIER_TEN_BUTTON.locked:
+                if tier_ten_button.is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
+                    if not tier_ten_button.locked:
                         print("Get god to bless server")
-        if members >= 10 and TIER_ONE_BUTTON.locked:
-            TIER_ONE_BUTTON.unlock()
+        if members >= 10 and tier_one_button.locked:
+            tier_one_button.unlock()
 
         for button in buttonlist:
             if button.is_over(pos):
@@ -173,4 +184,4 @@ def main(members):
 
 
 if __name__ == "__main__":
-    main(members)
+    main()
