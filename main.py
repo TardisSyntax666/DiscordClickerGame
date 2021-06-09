@@ -30,6 +30,11 @@ TIER_TWO = pygame.image.load(os.path.join('assets', 'tier_2.png')).convert_alpha
 TIER_THREE = pygame.image.load(os.path.join('assets', 'tier_3.png')).convert_alpha()
 TIER_FOUR = pygame.image.load(os.path.join('assets', 'tier_4.png')).convert_alpha()
 TIER_FIVE = pygame.image.load(os.path.join('assets', 'tier_5.png')).convert_alpha()
+TIER_SIX = pygame.image.load(os.path.join('assets', 'tier_6.png')).convert_alpha()
+TIER_SEVEN = pygame.image.load(os.path.join('assets', 'tier_7.png')).convert_alpha()
+TIER_EIGHT = pygame.image.load(os.path.join('assets', 'tier_8.png')).convert_alpha()
+TIER_NINE = pygame.image.load(os.path.join('assets', 'tier_9.png')).convert_alpha()
+TIER_TEN = pygame.image.load(os.path.join('assets', 'tier_10.png')).convert_alpha()
 TIER_SHADOW = pygame.image.load(os.path.join('assets', 'tier_shadow.png')).convert_alpha()
 TIER_NOT_SHADOW = pygame.image.load(os.path.join('assets', 'tier_not_shadow.png')).convert_alpha()
 
@@ -46,6 +51,11 @@ TIER_TWO_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TI
 TIER_THREE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW)
 TIER_FOUR_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 363), TIER_FOUR, TIER_SHADOW, TIER_NOT_SHADOW)
 TIER_FIVE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 479), TIER_FIVE, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_SIX_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 16), TIER_SIX, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_SEVEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 131), TIER_SEVEN, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_EIGHT_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 247), TIER_EIGHT, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_NINE_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_TEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW)
 
 buttonlist.append(CLICKER_BUTTON)
 buttonlist.append(TIER_ONE_BUTTON)
@@ -53,6 +63,11 @@ buttonlist.append(TIER_TWO_BUTTON)
 buttonlist.append(TIER_THREE_BUTTON)
 buttonlist.append(TIER_FOUR_BUTTON)
 buttonlist.append(TIER_FIVE_BUTTON)
+buttonlist.append(TIER_SIX_BUTTON)
+buttonlist.append(TIER_SEVEN_BUTTON)
+buttonlist.append(TIER_EIGHT_BUTTON)
+buttonlist.append(TIER_NINE_BUTTON)
+buttonlist.append(TIER_TEN_BUTTON)
 
 
 def window_draw(buttonlist, members_text):
@@ -81,6 +96,27 @@ def main(members):
                 if CLICKER_BUTTON.is_over(pos):
                     members += 1
                     print(members)
+                if TIER_ONE_BUTTON.is_over(pos):
+                    print("Add a text channel")
+                if TIER_TWO_BUTTON.is_over(pos):
+                    print("Add a voice channel")
+                if TIER_THREE_BUTTON.is_over(pos):
+                    print("Add a role")
+                if TIER_FOUR_BUTTON.is_over(pos):
+                    print("Add a bot")
+                if TIER_FIVE_BUTTON.is_over(pos):
+                    print("Heir an admin")
+                if TIER_SIX_BUTTON.is_over(pos):
+                    print("Ban a trouble maker")
+                if TIER_SEVEN_BUTTON.is_over(pos):
+                    print("Get mentioned by an Influencer")
+                if TIER_EIGHT_BUTTON.is_over(pos):
+                    print("Add a pay to win role")
+                if TIER_NINE_BUTTON.is_over(pos):
+                    print("Hack discord for members")
+                if TIER_TEN_BUTTON.is_over(pos):
+                    print("Get god to bless server")
+
 
         for button in buttonlist:
             if button.is_over(pos):
