@@ -33,10 +33,17 @@ class ClickerButton:
         self.height = size[1]
         self.x = pos[0]
         self.y = pos[1]
+        self.current_x = self.x
+        self.current_y = self.y
         self.surface = button_surface
+        self.pressed_surface = pygame.transform.smoothscale(button_surface, (180, 180))
+        self.current_surface = self.surface
         self.shadow = shadow_surface
         self.not_shadow = not_shadow_surface
+        self.pressed_shadow = pygame.transform.smoothscale(shadow_surface, (190, 190))
+        self.pressed_not_shadow = pygame.transform.smoothscale(not_shadow_surface, (190, 190))
         self.current_shadow = self.shadow
+        self.is_pressed = False
 
     def is_over(self, pos):
         if self.x < pos[0] < self.x + self.width:
@@ -52,8 +59,8 @@ buttonlist.append(CLICKER_BUTTON)
 def window_draw(buttonlist):
     WINDOW.blit(BACKGROUND_IMAGE, (0, 0))
     for button in buttonlist:
-        WINDOW.blit(button.current_shadow, (button.x - 5, button.y - 5))
-        WINDOW.blit(button.surface, (button.x, button.y))
+        WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
+        WINDOW.blit(button.current_surface, (button.current_x, button.current_y))
     pygame.display.update()
 
 
@@ -63,6 +70,7 @@ def main(members):
     while run:
         clock.tick(FPS)
         pos = pygame.mouse.get_pos()
+        mouse_button_state = pygame.mouse.get_pressed(num_buttons=3)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -74,8 +82,27 @@ def main(members):
         for button in buttonlist:
             if button.is_over(pos):
                 button.current_shadow = button.not_shadow
+                if mouse_button_state[0]:
+                    button.current_surface = button.pressed_surface
+                    button.current_shadow = button.pressed_not_shadow
+                    button.current_x = button.x + 10
+                    button.current_y = button.y + 10
+                    button.is_pressed = True
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.not_shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
             else:
-                button.current_shadow = button.shadow
+                if button.is_pressed and mouse_button_state[0]:
+                    button.current_shadow = button.pressed_shadow
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
 
         window_draw(buttonlist)
 
