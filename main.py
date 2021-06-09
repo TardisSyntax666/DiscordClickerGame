@@ -37,6 +37,7 @@ TIER_NINE = pygame.image.load(os.path.join('assets', 'tier_9.png')).convert_alph
 TIER_TEN = pygame.image.load(os.path.join('assets', 'tier_10.png')).convert_alpha()
 TIER_SHADOW = pygame.image.load(os.path.join('assets', 'tier_shadow.png')).convert_alpha()
 TIER_NOT_SHADOW = pygame.image.load(os.path.join('assets', 'tier_not_shadow.png')).convert_alpha()
+TIER_LOCKED = pygame.image.load(os.path.join('assets', 'tier_locked.png')).convert_alpha()
 
 BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
 INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
@@ -46,16 +47,16 @@ buttonlist = []
 
 CLICKER_BUTTON = b.Button(CLICKER_IMAGE_SIZE, CLICKER_BUTTON_LOCATION,
                           CLICKER_IMAGE, SHADOW_IMAGE, NOT_SHADOW_IMAGE)
-TIER_ONE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_TWO_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_THREE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_FOUR_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 363), TIER_FOUR, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_FIVE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 479), TIER_FIVE, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_SIX_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 16), TIER_SIX, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_SEVEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 131), TIER_SEVEN, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_EIGHT_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 247), TIER_EIGHT, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_NINE_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW)
-TIER_TEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW)
+TIER_ONE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 16), TIER_ONE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_TWO_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 131), TIER_TWO, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_THREE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 247), TIER_THREE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_FOUR_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 363), TIER_FOUR, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_FIVE_BUTTON = b.Button(TIER_IMAGE_SIZE, (10, 479), TIER_FIVE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_SIX_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 16), TIER_SIX, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_SEVEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 131), TIER_SEVEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_EIGHT_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 247), TIER_EIGHT, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_NINE_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
+TIER_TEN_BUTTON = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
 
 buttonlist.append(CLICKER_BUTTON)
 buttonlist.append(TIER_ONE_BUTTON)
@@ -70,15 +71,16 @@ buttonlist.append(TIER_NINE_BUTTON)
 buttonlist.append(TIER_TEN_BUTTON)
 
 
-def window_draw(buttonlist, members_text):
+def window_draw(buttonlist, textlist):
     WINDOW.blit(BACKGROUND_IMAGE, (0, 0))
     WINDOW.blit(INFO_BAR_IMAGE, (0, 600))
-    WINDOW.blit(members_text, (500 - (members_text.get_rect().size[0]) / 2, 650))
-    label = FONT.render("Server Member Count:", False, WHITE)
-    WINDOW.blit(label, (500 - (label.get_rect().size[0]) / 2, 610))
     for button in buttonlist:
         WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
         WINDOW.blit(button.current_surface, (button.current_x, button.current_y))
+    for text in textlist:
+        textobj = text[0]
+        text_pos = text[1]
+        WINDOW.blit(textobj, (text_pos[0] - (textobj.get_rect().size[0]) / 2, text_pos[1]))
     pygame.display.update()
 
 
@@ -97,26 +99,37 @@ def main(members):
                     members += 1
                     print(members)
                 if TIER_ONE_BUTTON.is_over(pos):
-                    print("Add a text channel")
+                    if not TIER_ONE_BUTTON.locked:
+                        print("Add a text channel")
                 if TIER_TWO_BUTTON.is_over(pos):
-                    print("Add a voice channel")
+                    if not TIER_TWO_BUTTON.locked:
+                        print("Add a voice channel")
                 if TIER_THREE_BUTTON.is_over(pos):
-                    print("Add a role")
+                    if not TIER_THREE_BUTTON.locked:
+                        print("Add a role")
                 if TIER_FOUR_BUTTON.is_over(pos):
-                    print("Add a bot")
+                    if not TIER_FOUR_BUTTON.locked:
+                        print("Add a bot")
                 if TIER_FIVE_BUTTON.is_over(pos):
-                    print("Heir an admin")
+                    if not TIER_FIVE_BUTTON.locked:
+                        print("Heir an admin")
                 if TIER_SIX_BUTTON.is_over(pos):
-                    print("Ban a trouble maker")
+                    if not TIER_SIX_BUTTON.locked:
+                        print("Ban a trouble maker")
                 if TIER_SEVEN_BUTTON.is_over(pos):
-                    print("Get mentioned by an Influencer")
+                    if not TIER_SEVEN_BUTTON.locked:
+                        print("Get mentioned by an Influencer")
                 if TIER_EIGHT_BUTTON.is_over(pos):
-                    print("Add a pay to win role")
+                    if not TIER_EIGHT_BUTTON.locked:
+                        print("Add a pay to win role")
                 if TIER_NINE_BUTTON.is_over(pos):
-                    print("Hack discord for members")
+                    if not TIER_NINE_BUTTON.locked:
+                        print("Hack discord for members")
                 if TIER_TEN_BUTTON.is_over(pos):
-                    print("Get god to bless server")
-
+                    if not TIER_TEN_BUTTON.locked:
+                        print("Get god to bless server")
+        if members >= 10 and TIER_ONE_BUTTON.locked:
+            TIER_ONE_BUTTON.unlock()
 
         for button in buttonlist:
             if button.is_over(pos):
@@ -143,9 +156,17 @@ def main(members):
                     button.current_y = button.y
                     button.is_pressed = False
 
+        textlist = []
         members_text_surface = FONT.render(str(members), False, WHITE)
+        main_counter = (members_text_surface, (500, 650))
 
-        window_draw(buttonlist, members_text_surface)
+        label_surface = FONT.render("Server Member Count:", False, WHITE)
+        main_counter_label = (label_surface, (500, 610))
+
+        textlist.append(main_counter)
+        textlist.append(main_counter_label)
+
+        window_draw(buttonlist, textlist)
 
     pygame.quit()
     quit()
