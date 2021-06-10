@@ -11,43 +11,44 @@ ICON = pygame.image.load("ICON.ico")
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DiscordClicker")
 pygame.display.set_icon(ICON)
+dir_path = str(os.path.realpath("assets"))
 
 WHITE = (255, 255, 255)
-FONT = pygame.font.SysFont(os.path.join('assets', 'Caramel Sweets.ttf'), 50)
-SMALL_FONT = pygame.font.SysFont(os.path.join('assets', 'Caramel Sweets.ttf'), 30)
+FONT = pygame.font.Font(str(os.path.join(dir_path, 'Caramel Sweets.ttf')), 40)
+SMALL_FONT = pygame.font.Font(os.path.join(dir_path, 'Caramel Sweets.ttf'), 25)
 
 FPS = 60
 
 CLICKER_IMAGE_SIZE = (200, 200)
-CLICKER_IMAGE = pygame.image.load(os.path.join('assets', 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
+CLICKER_IMAGE = pygame.image.load(os.path.join(dir_path, 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
 CLICKER_IMAGE = pygame.transform.smoothscale(CLICKER_IMAGE, CLICKER_IMAGE_SIZE)
 CLICKER_BUTTON_LOCATION = (400, 200)
-SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'shadow.png')).convert_alpha()
+SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path, 'shadow.png')).convert_alpha()
 SHADOW_IMAGE = pygame.transform.smoothscale(SHADOW_IMAGE, (210, 210))
-NOT_SHADOW_IMAGE = pygame.image.load(os.path.join('assets', 'not_shadow.png')).convert_alpha()
+NOT_SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path, 'not_shadow.png')).convert_alpha()
 NOT_SHADOW_IMAGE = pygame.transform.smoothscale(NOT_SHADOW_IMAGE, (210, 210))
 
 TIER_IMAGE_SIZE = (100, 100)
-TIER_ONE = pygame.image.load(os.path.join('assets', 'tier_1.png')).convert_alpha()
-TIER_TWO = pygame.image.load(os.path.join('assets', 'tier_2.png')).convert_alpha()
-TIER_THREE = pygame.image.load(os.path.join('assets', 'tier_3.png')).convert_alpha()
-TIER_FOUR = pygame.image.load(os.path.join('assets', 'tier_4.png')).convert_alpha()
-TIER_FIVE = pygame.image.load(os.path.join('assets', 'tier_5.png')).convert_alpha()
-TIER_SIX = pygame.image.load(os.path.join('assets', 'tier_6.png')).convert_alpha()
-TIER_SEVEN = pygame.image.load(os.path.join('assets', 'tier_7.png')).convert_alpha()
-TIER_EIGHT = pygame.image.load(os.path.join('assets', 'tier_8.png')).convert_alpha()
-TIER_NINE = pygame.image.load(os.path.join('assets', 'tier_9.png')).convert_alpha()
-TIER_TEN = pygame.image.load(os.path.join('assets', 'tier_10.png')).convert_alpha()
-TIER_SHADOW = pygame.image.load(os.path.join('assets', 'tier_shadow.png')).convert_alpha()
-TIER_NOT_SHADOW = pygame.image.load(os.path.join('assets', 'tier_not_shadow.png')).convert_alpha()
-TIER_LOCKED = pygame.image.load(os.path.join('assets', 'tier_locked.png')).convert_alpha()
+TIER_ONE = pygame.image.load(os.path.join(dir_path, 'tier_1.png')).convert_alpha()
+TIER_TWO = pygame.image.load(os.path.join(dir_path, 'tier_2.png')).convert_alpha()
+TIER_THREE = pygame.image.load(os.path.join(dir_path, 'tier_3.png')).convert_alpha()
+TIER_FOUR = pygame.image.load(os.path.join(dir_path, 'tier_4.png')).convert_alpha()
+TIER_FIVE = pygame.image.load(os.path.join(dir_path, 'tier_5.png')).convert_alpha()
+TIER_SIX = pygame.image.load(os.path.join(dir_path, 'tier_6.png')).convert_alpha()
+TIER_SEVEN = pygame.image.load(os.path.join(dir_path, 'tier_7.png')).convert_alpha()
+TIER_EIGHT = pygame.image.load(os.path.join(dir_path, 'tier_8.png')).convert_alpha()
+TIER_NINE = pygame.image.load(os.path.join(dir_path, 'tier_9.png')).convert_alpha()
+TIER_TEN = pygame.image.load(os.path.join(dir_path, 'tier_10.png')).convert_alpha()
+TIER_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_shadow.png')).convert_alpha()
+TIER_NOT_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_not_shadow.png')).convert_alpha()
+TIER_LOCKED = pygame.image.load(os.path.join(dir_path, 'tier_locked.png')).convert_alpha()
 
-BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join('assets', 'click_sound.wav'))
-pygame.mixer.music.load(os.path.join('assets', 'background_track.mp3'))
+BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join(dir_path, 'click_sound.wav'))
+pygame.mixer.music.load(os.path.join(dir_path, 'background_track.mp3'))
 pygame.mixer.music.play(-1, 0.0)
-BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
+BACKGROUND_IMAGE = pygame.image.load(os.path.join(dir_path, 'background.png')).convert_alpha()
 BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
-INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
+INFO_BAR_IMAGE = pygame.image.load(os.path.join(dir_path, 'info_bar.png')).convert_alpha()
 
 
 def window_draw(buttonlist, textlist, mouse_pos):
@@ -86,7 +87,7 @@ def window_draw(buttonlist, textlist, mouse_pos):
 def main():
     clock = pygame.time.Clock()
     run = True
-    members = 3000000000
+    members = 0
     per_second_counter = 0
     button_list = []
     generator_list = []
@@ -266,8 +267,9 @@ def main():
             button_list[8].unlock()
         if generator_list[7].owned >= 10 and button_list[9].locked:
             button_list[9].unlock()
-        if generator_list[8].owned >= 10 and button_list[9].locked:
-            button_list[9].unlock()
+        if generator_list[8].owned >= 10 and button_list[10].locked:
+            button_list[10].unlock()
+
 
         textlist = []
         if per_second_counter == 60:
