@@ -46,11 +46,28 @@ BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join('assets', 'click_sound.wav'
 pygame.mixer.music.load(os.path.join('assets', 'background_track.mp3'))
 pygame.mixer.music.play(1, 0.0)
 BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
+BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
 INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
 
 
-def window_draw(buttonlist, textlist):
-    WINDOW.blit(BACKGROUND_IMAGE, (0, 0))
+def window_draw(buttonlist, textlist, mouse_pos):
+    if 1001 > mouse_pos[0] > -1 and 801 > mouse_pos[1] > -1:
+        x_var = 500 - mouse_pos[0]
+        y_var = 400 - mouse_pos[1]
+        if x_var >= 500:
+            offx = int((x_var - 500)/500*25)
+        else:
+            offx = int(x_var / 500 * 25)
+
+        if y_var >= 400:
+            offy = int((y_var - 400)/400*25)
+        else:
+            offy = int(y_var / 400 * 25)
+    else:
+        offx = 0
+        offy = 0
+
+    WINDOW.blit(BACKGROUND_IMAGE, (-25+offx, -25+offy))
     WINDOW.blit(INFO_BAR_IMAGE, (0, 600))
     for button in buttonlist:
         WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
@@ -244,7 +261,7 @@ def main():
         textlist.append(main_counter)
         textlist.append(main_counter_label)
 
-        window_draw(button_list, textlist)
+        window_draw(button_list, textlist, pos)
 
     pygame.mixer.music.stop()
     pygame.quit()
