@@ -86,7 +86,7 @@ def window_draw(buttonlist, textlist, mouse_pos):
 def main():
     clock = pygame.time.Clock()
     run = True
-    members = 2500000000
+    members = 3000000000
     per_second_counter = 0
     button_list = []
     generator_list = []
@@ -105,15 +105,15 @@ def main():
     tier_ten_button = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
 
     tier_one_gen = g.Generator(10, 1.10, 1.20, 1)
-    tier_two_gen = g.Generator(200, 5, 1.30, 2.5)
-    tier_three_gen = g.Generator(5000, 10, 1.20, 5)
+    tier_two_gen = g.Generator(200, 5, 1.10, 2.5)
+    tier_three_gen = g.Generator(5000, 10, 1.10, 5)
     tier_four_gen = g.Generator(40000, 150, 1.10, 10)
-    tier_five_gen = g.Generator(1000000, 300, 1.30, 400)
-    tier_six_gen = g.Generator(80000000, 1500, 1.20, 800)
-    tier_seven_gen = g.Generator(1000000000, 20000, 1.14, 1000)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
+    tier_five_gen = g.Generator(1000000, 300, 1.10, 400)
+    tier_six_gen = g.Generator(80000000, 1500, 1.10, 800)
+    tier_seven_gen = g.Generator(1000000000, 20000, 1.10, 1000)
+    tier_eight_gen = g.Generator(20000000000, 300000, 1.10, 2700)
+    tier_nine_gen = g.Generator(100000000000, 2700000, 1.10, 3600)
+    tier_ten_gen = g.Generator(10000000000000, 27000000, 1.10, 36000)
 
     button_list.append(clicker_button)
     button_list.append(tier_one_button)
@@ -134,6 +134,9 @@ def main():
     generator_list.append(tier_five_gen)
     generator_list.append(tier_six_gen)
     generator_list.append(tier_seven_gen)
+    generator_list.append(tier_eight_gen)
+    generator_list.append(tier_nine_gen)
+    generator_list.append(tier_ten_gen)
 
     while run:
         clock.tick(FPS)
@@ -217,16 +220,34 @@ def main():
 
                 if button_list[8].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_eight_button.locked:
-                        print("Add a pay to win role")
+                    if not button_list[8].locked:
+                        if generator_list[7].cost <= members:
+                            members = int(float(members) - generator_list[7].cost)
+                            generator_list[7].upgrade()
+                            print("Add a pay to win role")
+                        else:
+                            print(f"this costs {generator_list[7].cost}")
+
                 if button_list[9].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_nine_button.locked:
-                        print("Hack discord for members")
+                    if not button_list[9].locked:
+                        if generator_list[8].cost <= members:
+                            members = int(float(members) - generator_list[8].cost)
+                            generator_list[8].upgrade()
+                            print("Hack discord for members")
+                        else:
+                            print(f"this costs {generator_list[7].cost}")
+
                 if button_list[10].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_ten_button.locked:
-                        print("Get god to bless server")
+                    if not button_list[10].locked:
+                        if generator_list[9].cost <= members:
+                            members = int(float(members) - generator_list[9].cost)
+                            generator_list[9].upgrade()
+                            print("Get god to bless server")
+                        else:
+                            print(f"this costs {generator_list[9].cost}")
+
         if members >= 10 and button_list[1].locked:
             button_list[1].unlock()
         if generator_list[0].owned >= 10 and button_list[2].locked:
@@ -241,6 +262,12 @@ def main():
             button_list[6].unlock()
         if generator_list[5].owned >= 10 and button_list[7].locked:
             button_list[7].unlock()
+        if generator_list[6].owned >= 10 and button_list[8].locked:
+            button_list[8].unlock()
+        if generator_list[7].owned >= 10 and button_list[9].locked:
+            button_list[9].unlock()
+        if generator_list[8].owned >= 10 and button_list[9].locked:
+            button_list[9].unlock()
 
         textlist = []
         if per_second_counter == 60:
