@@ -44,7 +44,7 @@ TIER_LOCKED = pygame.image.load(os.path.join('assets', 'tier_locked.png')).conve
 
 BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join('assets', 'click_sound.wav'))
 pygame.mixer.music.load(os.path.join('assets', 'background_track.mp3'))
-pygame.mixer.music.play(1, 0.0)
+pygame.mixer.music.play(-1, 0.0)
 BACKGROUND_IMAGE = pygame.image.load(os.path.join('assets', 'background.png')).convert_alpha()
 BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
 INFO_BAR_IMAGE = pygame.image.load(os.path.join('assets', 'info_bar.png')).convert_alpha()
@@ -86,7 +86,7 @@ def window_draw(buttonlist, textlist, mouse_pos):
 def main():
     clock = pygame.time.Clock()
     run = True
-    members = 0
+    members = 2500000000
     per_second_counter = 0
     button_list = []
     generator_list = []
@@ -106,11 +106,11 @@ def main():
 
     tier_one_gen = g.Generator(10, 1.10, 1.20, 1)
     tier_two_gen = g.Generator(200, 5, 1.30, 2.5)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(00, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
-    #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
+    tier_three_gen = g.Generator(5000, 10, 1.20, 5)
+    tier_four_gen = g.Generator(40000, 150, 1.10, 10)
+    tier_five_gen = g.Generator(1000000, 300, 1.30, 400)
+    tier_six_gen = g.Generator(80000000, 1500, 1.20, 800)
+    tier_seven_gen = g.Generator(1000000000, 20000, 1.14, 1000)
     #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
     #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
     #tier_three_gen = g.Generator(25000, 14.95, 1.14, 100)
@@ -129,7 +129,11 @@ def main():
 
     generator_list.append(tier_one_gen)
     generator_list.append(tier_two_gen)
-    #generator_list.append(tier_three_gen)
+    generator_list.append(tier_three_gen)
+    generator_list.append(tier_four_gen)
+    generator_list.append(tier_five_gen)
+    generator_list.append(tier_six_gen)
+    generator_list.append(tier_seven_gen)
 
     while run:
         clock.tick(FPS)
@@ -173,20 +177,44 @@ def main():
 
                 if button_list[4].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_four_button.locked:
-                        print("Add a bot")
+                    if not button_list[4].locked:
+                        if generator_list[3].cost <= members:
+                            members = int(float(members) - generator_list[3].cost)
+                            generator_list[3].upgrade()
+                            print("Add a bot")
+                        else:
+                            print(f"this costs {generator_list[3].cost}")
+
                 if button_list[5].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_five_button.locked:
-                        print("Heir an admin")
+                    if not button_list[5].locked:
+                        if generator_list[4].cost <= members:
+                            members = int(float(members) - generator_list[4].cost)
+                            generator_list[4].upgrade()
+                            print("Heir a mod")
+                        else:
+                            print(f"this costs {generator_list[4].cost}")
+
                 if button_list[6].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_six_button.locked:
-                        print("Ban a trouble maker")
+                    if not button_list[6].locked:
+                        if generator_list[5].cost <= members:
+                            members = int(float(members) - generator_list[5].cost)
+                            generator_list[5].upgrade()
+                            print("Ban a trouble maker")
+                        else:
+                            print(f"this costs {generator_list[5].cost}")
+
                 if button_list[7].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
-                    if not tier_seven_button.locked:
-                        print("Get mentioned by an Influencer")
+                    if not button_list[7].locked:
+                        if generator_list[6].cost <= members:
+                            members = int(float(members) - generator_list[6].cost)
+                            generator_list[6].upgrade()
+                            print("Get mentioned by an influencer")
+                        else:
+                            print(f"this costs {generator_list[6].cost}")
+
                 if button_list[8].is_over(pos):
                     BUTTON_CLICK_SOUND.play()
                     if not tier_eight_button.locked:
@@ -205,6 +233,14 @@ def main():
             button_list[2].unlock()
         if generator_list[1].owned >= 10 and button_list[3].locked:
             button_list[3].unlock()
+        if generator_list[2].owned >= 10 and button_list[4].locked:
+            button_list[4].unlock()
+        if generator_list[3].owned >= 10 and button_list[5].locked:
+            button_list[5].unlock()
+        if generator_list[4].owned >= 10 and button_list[6].locked:
+            button_list[6].unlock()
+        if generator_list[5].owned >= 10 and button_list[7].locked:
+            button_list[7].unlock()
 
         textlist = []
         if per_second_counter == 60:
@@ -216,13 +252,23 @@ def main():
                     members = int(float(members) + gen.production)
             button_num = generator_list.index(gen) + 1
             button = button_list[button_num]
-            if not button.locked:
+            if not button.locked and button_num < 6:
                 gen_cost_label_surface = SMALL_FONT.render("Cost: {:,}".format(int(gen.cost)), False, WHITE)
                 gen_product_label_surface = SMALL_FONT.render("Revenue: {:,}".format(int(gen.production)), False, WHITE)
                 gen_owned_label_surface = SMALL_FONT.render("Owned: {:,}".format(gen.owned), False, WHITE)
                 cost_label = (gen_cost_label_surface, (120, button.y+16), False)
                 product_label = (gen_product_label_surface, (120, button.y+42), False)
                 owned_label = (gen_owned_label_surface, (120, button.y+68), False)
+                textlist.append(cost_label)
+                textlist.append(product_label)
+                textlist.append(owned_label)
+            if not button.locked and button_num > 5:
+                gen_cost_label_surface = SMALL_FONT.render("{:,} :Cost".format(int(gen.cost)), False, WHITE)
+                gen_product_label_surface = SMALL_FONT.render("{:,} :Revenue".format(int(gen.production)), False, WHITE)
+                gen_owned_label_surface = SMALL_FONT.render("{:,} :Owned".format(gen.owned), False, WHITE)
+                cost_label = (gen_cost_label_surface, (880-gen_cost_label_surface.get_rect().size[0], button.y + 16), False)
+                product_label = (gen_product_label_surface, (880-gen_product_label_surface.get_rect().size[0], button.y + 42), False)
+                owned_label = (gen_owned_label_surface, (880-gen_owned_label_surface.get_rect().size[0], button.y + 68), False)
                 textlist.append(cost_label)
                 textlist.append(product_label)
                 textlist.append(owned_label)
