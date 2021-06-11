@@ -4,7 +4,7 @@ import math
 
 class Generator:
 
-    def __init__(self, starting_cost, starting_product, growth_rate, starting_rev):
+    def __init__(self, starting_cost, starting_product, growth_rate, starting_rev, message):
         self.starting_cost = starting_cost
         self.starting_product = starting_product
         self.growth_rate = growth_rate
@@ -12,6 +12,7 @@ class Generator:
         self.owned = 0
         self.cost = self.starting_cost
         self.production = 0
+        self.message = message
 
     def upgrade(self):
         self.owned += 1

@@ -31,6 +31,7 @@ class Button:
         self.current_shadow = self.shadow
         self.is_pressed = False
 
+
     def unlock(self):
         self.locked = False
         self.surface = self.real_surface

@@ -105,16 +105,16 @@ def main():
     tier_nine_button = b.Button(TIER_IMAGE_SIZE, (890, 363), TIER_NINE, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
     tier_ten_button = b.Button(TIER_IMAGE_SIZE, (890, 479), TIER_TEN, TIER_SHADOW, TIER_NOT_SHADOW, TIER_LOCKED)
 
-    tier_one_gen = g.Generator(10, 1.10, 1.20, 1)
-    tier_two_gen = g.Generator(200, 5, 1.10, 2.5)
-    tier_three_gen = g.Generator(5000, 10, 1.10, 5)
-    tier_four_gen = g.Generator(40000, 150, 1.10, 10)
-    tier_five_gen = g.Generator(1000000, 300, 1.10, 400)
-    tier_six_gen = g.Generator(80000000, 1500, 1.10, 800)
-    tier_seven_gen = g.Generator(1000000000, 20000, 1.10, 1000)
-    tier_eight_gen = g.Generator(20000000000, 300000, 1.10, 2700)
-    tier_nine_gen = g.Generator(100000000000, 2700000, 1.10, 3600)
-    tier_ten_gen = g.Generator(10000000000000, 27000000, 1.10, 36000)
+    tier_one_gen = g.Generator(10, 1.10, 1.20, 1, "Created a text channel!")
+    tier_two_gen = g.Generator(200, 5, 1.10, 2.5, "Created a voice channel!")
+    tier_three_gen = g.Generator(5000, 10, 1.10, 5, "Created a role!")
+    tier_four_gen = g.Generator(40000, 150, 1.10, 10, "Added a bot!")
+    tier_five_gen = g.Generator(1000000, 300, 1.10, 400, "Hired a mod!")
+    tier_six_gen = g.Generator(80000000, 1500, 1.10, 800, "Baned a trouble maker!")
+    tier_seven_gen = g.Generator(1000000000, 20000, 1.10, 1000, "Got mentioned by an influencer!")
+    tier_eight_gen = g.Generator(20000000000, 300000, 1.10, 2700, "Created a pay to win role!")
+    tier_nine_gen = g.Generator(100000000000, 2700000, 1.10, 3600, "Hacked discord for members!")
+    tier_ten_gen = g.Generator(20000000000000, 27000000, 1.10, 36000, "Got God to bless server!")
 
     button_list.append(clicker_button)
     button_list.append(tier_one_button)
@@ -149,126 +149,25 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if button_list[0].is_over(pos):
                     members += 1
-                if button_list[1].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[1].locked:
-                        if int(generator_list[0].cost) <= members:
-                            members = int(float(members) - generator_list[0].cost)
-                            generator_list[0].upgrade()
-                            print("Add a text channel")
-                        else:
-                            print(f"this costs {generator_list[0].cost}")
 
-                if button_list[2].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[2].locked:
-                        if generator_list[1].cost <= members:
-                            members = int(float(members) - generator_list[1].cost)
-                            generator_list[1].upgrade()
-                            print("Add a voice channel")
-                        else:
-                            print(f"this costs {generator_list[1].cost}")
-
-                if button_list[3].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[3].locked:
-                        if generator_list[2].cost <= members:
-                            members = int(float(members) - generator_list[2].cost)
-                            generator_list[2].upgrade()
-                            print("Add a role")
-                        else:
-                            print(f"this costs {generator_list[2].cost}")
-
-                if button_list[4].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[4].locked:
-                        if generator_list[3].cost <= members:
-                            members = int(float(members) - generator_list[3].cost)
-                            generator_list[3].upgrade()
-                            print("Add a bot")
-                        else:
-                            print(f"this costs {generator_list[3].cost}")
-
-                if button_list[5].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[5].locked:
-                        if generator_list[4].cost <= members:
-                            members = int(float(members) - generator_list[4].cost)
-                            generator_list[4].upgrade()
-                            print("Heir a mod")
-                        else:
-                            print(f"this costs {generator_list[4].cost}")
-
-                if button_list[6].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[6].locked:
-                        if generator_list[5].cost <= members:
-                            members = int(float(members) - generator_list[5].cost)
-                            generator_list[5].upgrade()
-                            print("Ban a trouble maker")
-                        else:
-                            print(f"this costs {generator_list[5].cost}")
-
-                if button_list[7].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[7].locked:
-                        if generator_list[6].cost <= members:
-                            members = int(float(members) - generator_list[6].cost)
-                            generator_list[6].upgrade()
-                            print("Get mentioned by an influencer")
-                        else:
-                            print(f"this costs {generator_list[6].cost}")
-
-                if button_list[8].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[8].locked:
-                        if generator_list[7].cost <= members:
-                            members = int(float(members) - generator_list[7].cost)
-                            generator_list[7].upgrade()
-                            print("Add a pay to win role")
-                        else:
-                            print(f"this costs {generator_list[7].cost}")
-
-                if button_list[9].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[9].locked:
-                        if generator_list[8].cost <= members:
-                            members = int(float(members) - generator_list[8].cost)
-                            generator_list[8].upgrade()
-                            print("Hack discord for members")
-                        else:
-                            print(f"this costs {generator_list[7].cost}")
-
-                if button_list[10].is_over(pos):
-                    BUTTON_CLICK_SOUND.play()
-                    if not button_list[10].locked:
-                        if generator_list[9].cost <= members:
-                            members = int(float(members) - generator_list[9].cost)
-                            generator_list[9].upgrade()
-                            print("Get god to bless server")
-                        else:
-                            print(f"this costs {generator_list[9].cost}")
+                for i in range(1, len(button_list)):
+                    button = button_list[i]
+                    if button.is_over(pos):
+                        BUTTON_CLICK_SOUND.play()
+                        if not button.locked:
+                            if int(generator_list[i-1].cost) <= members:
+                                members = int(float(members) - generator_list[i-1].cost)
+                                generator_list[i-1].upgrade()
+                                print(generator_list[i-1].message)
+                            else:
+                                print(f"this costs {generator_list[i-1].cost}")
 
         if members >= 10 and button_list[1].locked:
             button_list[1].unlock()
-        if generator_list[0].owned >= 10 and button_list[2].locked:
-            button_list[2].unlock()
-        if generator_list[1].owned >= 10 and button_list[3].locked:
-            button_list[3].unlock()
-        if generator_list[2].owned >= 10 and button_list[4].locked:
-            button_list[4].unlock()
-        if generator_list[3].owned >= 10 and button_list[5].locked:
-            button_list[5].unlock()
-        if generator_list[4].owned >= 10 and button_list[6].locked:
-            button_list[6].unlock()
-        if generator_list[5].owned >= 10 and button_list[7].locked:
-            button_list[7].unlock()
-        if generator_list[6].owned >= 10 and button_list[8].locked:
-            button_list[8].unlock()
-        if generator_list[7].owned >= 10 and button_list[9].locked:
-            button_list[9].unlock()
-        if generator_list[8].owned >= 10 and button_list[10].locked:
-            button_list[10].unlock()
+        for gen in generator_list:
+            i = generator_list.index(gen)+2
+            if gen.owned >= 10 and button_list[i].locked:
+                button_list[i].unlock()
 
 
         textlist = []
@@ -340,7 +239,6 @@ def main():
 
     pygame.mixer.music.stop()
     pygame.quit()
-    quit()
 
 
 if __name__ == "__main__":
