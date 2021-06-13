@@ -17,6 +17,10 @@ dir_path_buttons = str(os.path.join(os.path.realpath("assets"), "buttons"))
 
 WHITE = (255, 255, 255)
 COLOUR = (54, 57, 63)
+FADE_ONE = (214, 214, 216)
+FADE_TWO = (173, 173, 176)
+FADE_THREE = (132, 132, 137)
+FADE_FOUR = (91, 91, 97)
 FONT = pygame.font.Font(str(os.path.join(dir_path, 'Caramel Sweets.ttf')), 40)
 SMALL_FONT = pygame.font.Font(os.path.join(dir_path, 'Caramel Sweets.ttf'), 25)
 
@@ -24,7 +28,8 @@ CLOCK = pygame.time.Clock()
 FPS = 60
 
 CLICKER_IMAGE_SIZE = (200, 200)
-CLICKER_IMAGE = pygame.image.load(os.path.join(dir_path_buttons, 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
+CLICKER_IMAGE = pygame.image.load(
+    os.path.join(dir_path_buttons, 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
 CLICKER_IMAGE = pygame.transform.smoothscale(CLICKER_IMAGE, CLICKER_IMAGE_SIZE)
 CLICKER_BUTTON_LOCATION = (400, 200)
 SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path_buttons, 'shadow.png')).convert_alpha()
@@ -141,7 +146,6 @@ def game_menu(screenshot_path):
         game_menu_window_draw(menu_buttons_list, image)
     os.remove(screenshot_path)
     return quit
-
 
 
 def start_window_draw(buttonlist, images_list=None):
@@ -261,6 +265,7 @@ def main():
     run = True
     members = 0
     per_second_counter = 0
+    message_queue = (None, 0, 0)
     button_list = []
     generator_list = []
 
@@ -330,9 +335,13 @@ def main():
                             if int(generator_list[i - 1].cost) <= members:
                                 members = int(float(members) - generator_list[i - 1].cost)
                                 generator_list[i - 1].upgrade()
-                                print(generator_list[i - 1].message)
+
+                                if message_queue[0] is None or message_queue[0] == str(generator_list[i - 1].message):
+                                    message_queue = (str(generator_list[i - 1].message), message_queue[1] + 1, 300)
+                                else:
+                                    message_queue = (str(generator_list[i - 1].message), 1, 300)
                             else:
-                                print(f"this costs {generator_list[i - 1].cost}")
+                                message_queue = (f"That costs {str(int(generator_list[i - 1].cost))} members", 1, 300)
 
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_ESCAPE] or not pygame.key.get_focused():
@@ -414,8 +423,33 @@ def main():
         label_surface = FONT.render("Server Member Count:", False, WHITE)
         main_counter_label = (label_surface, (500, 610), True)
 
+        if message_queue[0] is not None:
+            if message_queue[2] == 0:
+                message_queue = (None, 0, 0)
+            else:
+                if message_queue[2] in range(241, 300):
+                    colour = WHITE
+                elif message_queue[2] in range(181, 240):
+                    colour = FADE_ONE
+                elif message_queue[2] in range(121, 180):
+                    colour = FADE_TWO
+                elif message_queue[2] in range(61, 120):
+                    colour = FADE_THREE
+                else:
+                    colour = FADE_FOUR
+
+                if message_queue[1] != 1:
+                    info_label_surface = SMALL_FONT.render(str(str(message_queue[0])+ f" x{str(message_queue[1])}"), False, colour)
+                    info_text_label = (info_label_surface, (500, 750), True)
+                else:
+                    info_label_surface = SMALL_FONT.render(str(message_queue[0]), False, colour)
+                    info_text_label = (info_label_surface, (500, 750), True)
+                textlist.append(info_text_label)
+                message_queue = (message_queue[0], message_queue[1], message_queue[2]-1)
+
         textlist.append(main_counter)
         textlist.append(main_counter_label)
+
 
         main_window_draw(button_list, textlist, pos)
 
