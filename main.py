@@ -64,6 +64,7 @@ MENU_NOT_SHADOW = pygame.image.load(os.path.join(dir_path_buttons, 'menu_not_sha
 TITLE = pygame.image.load(os.path.join(dir_path, 'title.png')).convert_alpha()
 BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join(dir_path, 'click_sound.wav'))
 pygame.mixer.music.load(os.path.join(dir_path, 'background_track.mp3'))
+pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1, 0.0)
 BACKGROUND_IMAGE = pygame.image.load(os.path.join(dir_path, 'background.png')).convert_alpha()
 BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
@@ -109,12 +110,15 @@ def game_menu(screenshot_path):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menu_buttons_list[0].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     run = False
 
                 if menu_buttons_list[1].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     pass
 
                 if menu_buttons_list[2].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     quit = True
                     run = False
 
@@ -184,12 +188,15 @@ def start_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if menu_buttons_list[0].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     run = False
 
                 if menu_buttons_list[1].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     pass
 
                 if menu_buttons_list[2].is_over(pos):
+                    BUTTON_CLICK_SOUND.play()
                     quit = True
                     run = False
 
