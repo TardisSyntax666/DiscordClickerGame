@@ -14,9 +14,11 @@ pygame.display.set_icon(ICON)
 dir_path = str(os.path.realpath("assets"))
 
 WHITE = (255, 255, 255)
+COLOUR = (54, 57, 63)
 FONT = pygame.font.Font(str(os.path.join(dir_path, 'Caramel Sweets.ttf')), 40)
 SMALL_FONT = pygame.font.Font(os.path.join(dir_path, 'Caramel Sweets.ttf'), 25)
 
+CLOCK = pygame.time.Clock()
 FPS = 60
 
 CLICKER_IMAGE_SIZE = (200, 200)
@@ -43,6 +45,16 @@ TIER_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_shadow.png')).conve
 TIER_NOT_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_not_shadow.png')).convert_alpha()
 TIER_LOCKED = pygame.image.load(os.path.join(dir_path, 'tier_locked.png')).convert_alpha()
 
+MENU_IMAGE_SIZE = (150, 100)
+PLAY = pygame.image.load(os.path.join(dir_path, 'play.png')).convert_alpha()
+RESUME = pygame.image.load(os.path.join(dir_path, 'resume.png')).convert_alpha()
+SAVE = pygame.image.load(os.path.join(dir_path, 'save.png')).convert_alpha()
+LOAD = pygame.image.load(os.path.join(dir_path, 'load.png')).convert_alpha()
+QUIT = pygame.image.load(os.path.join(dir_path, 'quit.png')).convert_alpha()
+MENU_SHADOW = pygame.image.load(os.path.join(dir_path, 'menu_shadow.png')).convert_alpha()
+MENU_NOT_SHADOW = pygame.image.load(os.path.join(dir_path, 'menu_not_shadow.png')).convert_alpha()
+
+TITLE = pygame.image.load(os.path.join(dir_path, 'title.png')).convert_alpha()
 BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join(dir_path, 'click_sound.wav'))
 pygame.mixer.music.load(os.path.join(dir_path, 'background_track.mp3'))
 pygame.mixer.music.play(-1, 0.0)
@@ -51,24 +63,104 @@ BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
 INFO_BAR_IMAGE = pygame.image.load(os.path.join(dir_path, 'info_bar.png')).convert_alpha()
 
 
-def window_draw(buttonlist, textlist, mouse_pos):
+def menu_draw(buttonlist, images_list=None):
+    WINDOW.fill(COLOUR)
+    for button in buttonlist:
+        WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
+        WINDOW.blit(button.current_surface, (button.current_x, button.current_y))
+    if images_list is not None:
+        for image in images_list:
+            WINDOW.blit(image[0], image[1])
+
+    pygame.display.update()
+
+
+def start_menu():
+    run = True
+    quit = False
+    menu_buttons_list = []
+
+    play_button = b.Button(MENU_IMAGE_SIZE, (225, 550), PLAY, MENU_SHADOW, MENU_NOT_SHADOW)
+    load_button = b.Button(MENU_IMAGE_SIZE, (425, 550), LOAD, MENU_SHADOW, MENU_NOT_SHADOW)
+    quit_button = b.Button(MENU_IMAGE_SIZE, (625, 550), QUIT, MENU_SHADOW, MENU_NOT_SHADOW)
+
+    menu_buttons_list.append(play_button)
+    menu_buttons_list.append(load_button)
+    menu_buttons_list.append(quit_button)
+    while run:
+        CLOCK.tick(FPS)
+        pos = pygame.mouse.get_pos()
+        mouse_button_state = pygame.mouse.get_pressed(num_buttons=3)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit = True
+                run = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if menu_buttons_list[0].is_over(pos):
+                    run = False
+
+                if menu_buttons_list[0].is_over(pos):
+                    run = False
+
+                if menu_buttons_list[2].is_over(pos):
+                    quit = True
+                    run = False
+
+        for button in menu_buttons_list:
+            if button.is_over(pos):
+                button.current_shadow = button.not_shadow
+                if mouse_button_state[0]:
+                    button.current_surface = button.pressed_surface
+                    button.current_shadow = button.pressed_not_shadow
+                    button.current_x = button.x + button.shrink_distance
+                    button.current_y = button.y + button.shrink_distance
+                    button.is_pressed = True
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.not_shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
+            else:
+                if button.is_pressed and mouse_button_state[0]:
+                    button.current_shadow = button.pressed_shadow
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
+
+        images_list = [(TITLE, (125, 50))]
+
+        menu_draw(menu_buttons_list, images_list)
+    if not quit:
+        main()
+    else:
+        pygame.mixer.music.stop()
+        pygame.quit()
+
+
+def main_window_draw(buttonlist, textlist, mouse_pos):
     if 1001 > mouse_pos[0] > -1 and 801 > mouse_pos[1] > -1:
         x_var = 500 - mouse_pos[0]
         y_var = 400 - mouse_pos[1]
         if x_var >= 500:
-            offx = int((x_var - 500)/500*25)
+            offx = int((x_var - 500) / 500 * 25)
         else:
             offx = int(x_var / 500 * 25)
 
         if y_var >= 400:
-            offy = int((y_var - 400)/400*25)
+            offy = int((y_var - 400) / 400 * 25)
         else:
             offy = int(y_var / 400 * 25)
     else:
         offx = 0
         offy = 0
 
-    WINDOW.blit(BACKGROUND_IMAGE, (-25+offx, -25+offy))
+    WINDOW.blit(BACKGROUND_IMAGE, (-25 + offx, -25 + offy))
     WINDOW.blit(INFO_BAR_IMAGE, (0, 600))
     for button in buttonlist:
         WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
@@ -85,7 +177,6 @@ def window_draw(buttonlist, textlist, mouse_pos):
 
 
 def main():
-    clock = pygame.time.Clock()
     run = True
     members = 0
     per_second_counter = 0
@@ -140,7 +231,7 @@ def main():
     generator_list.append(tier_ten_gen)
 
     while run:
-        clock.tick(FPS)
+        CLOCK.tick(FPS)
         pos = pygame.mouse.get_pos()
         mouse_button_state = pygame.mouse.get_pressed(num_buttons=3)
         for event in pygame.event.get():
@@ -155,20 +246,19 @@ def main():
                     if button.is_over(pos):
                         BUTTON_CLICK_SOUND.play()
                         if not button.locked:
-                            if int(generator_list[i-1].cost) <= members:
-                                members = int(float(members) - generator_list[i-1].cost)
-                                generator_list[i-1].upgrade()
-                                print(generator_list[i-1].message)
+                            if int(generator_list[i - 1].cost) <= members:
+                                members = int(float(members) - generator_list[i - 1].cost)
+                                generator_list[i - 1].upgrade()
+                                print(generator_list[i - 1].message)
                             else:
-                                print(f"this costs {generator_list[i-1].cost}")
+                                print(f"this costs {generator_list[i - 1].cost}")
 
         if members >= 10 and button_list[1].locked:
             button_list[1].unlock()
         for gen in generator_list:
-            i = generator_list.index(gen)+2
+            i = generator_list.index(gen) + 2
             if gen.owned >= 10 and button_list[i].locked:
                 button_list[i].unlock()
-
 
         textlist = []
         if per_second_counter == 60:
@@ -184,9 +274,9 @@ def main():
                 gen_cost_label_surface = SMALL_FONT.render("Cost: {:,}".format(int(gen.cost)), False, WHITE)
                 gen_product_label_surface = SMALL_FONT.render("Revenue: {:,}".format(int(gen.production)), False, WHITE)
                 gen_owned_label_surface = SMALL_FONT.render("Owned: {:,}".format(gen.owned), False, WHITE)
-                cost_label = (gen_cost_label_surface, (120, button.y+16), False)
-                product_label = (gen_product_label_surface, (120, button.y+42), False)
-                owned_label = (gen_owned_label_surface, (120, button.y+68), False)
+                cost_label = (gen_cost_label_surface, (120, button.y + 16), False)
+                product_label = (gen_product_label_surface, (120, button.y + 42), False)
+                owned_label = (gen_owned_label_surface, (120, button.y + 68), False)
                 textlist.append(cost_label)
                 textlist.append(product_label)
                 textlist.append(owned_label)
@@ -194,9 +284,13 @@ def main():
                 gen_cost_label_surface = SMALL_FONT.render("{:,} :Cost".format(int(gen.cost)), False, WHITE)
                 gen_product_label_surface = SMALL_FONT.render("{:,} :Revenue".format(int(gen.production)), False, WHITE)
                 gen_owned_label_surface = SMALL_FONT.render("{:,} :Owned".format(gen.owned), False, WHITE)
-                cost_label = (gen_cost_label_surface, (880-gen_cost_label_surface.get_rect().size[0], button.y + 16), False)
-                product_label = (gen_product_label_surface, (880-gen_product_label_surface.get_rect().size[0], button.y + 42), False)
-                owned_label = (gen_owned_label_surface, (880-gen_owned_label_surface.get_rect().size[0], button.y + 68), False)
+                cost_label = (
+                    gen_cost_label_surface, (880 - gen_cost_label_surface.get_rect().size[0], button.y + 16), False)
+                product_label = (
+                    gen_product_label_surface, (880 - gen_product_label_surface.get_rect().size[0], button.y + 42),
+                    False)
+                owned_label = (
+                    gen_owned_label_surface, (880 - gen_owned_label_surface.get_rect().size[0], button.y + 68), False)
                 textlist.append(cost_label)
                 textlist.append(product_label)
                 textlist.append(owned_label)
@@ -235,11 +329,11 @@ def main():
         textlist.append(main_counter)
         textlist.append(main_counter_label)
 
-        window_draw(button_list, textlist, pos)
+        main_window_draw(button_list, textlist, pos)
 
     pygame.mixer.music.stop()
     pygame.quit()
 
 
 if __name__ == "__main__":
-    main()
+    start_menu()
