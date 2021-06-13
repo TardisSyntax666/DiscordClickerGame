@@ -2,6 +2,7 @@ import pygame
 import button as b
 import generator as g
 import os
+from PIL import Image, ImageFilter
 
 pygame.font.init()
 pygame.mixer.init()
@@ -12,6 +13,7 @@ WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("DiscordClicker")
 pygame.display.set_icon(ICON)
 dir_path = str(os.path.realpath("assets"))
+dir_path_buttons = str(os.path.join(os.path.realpath("assets"), "buttons"))
 
 WHITE = (255, 255, 255)
 COLOUR = (54, 57, 63)
@@ -22,37 +24,37 @@ CLOCK = pygame.time.Clock()
 FPS = 60
 
 CLICKER_IMAGE_SIZE = (200, 200)
-CLICKER_IMAGE = pygame.image.load(os.path.join(dir_path, 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
+CLICKER_IMAGE = pygame.image.load(os.path.join(dir_path_buttons, 'DiscordClicker_asset_MiniDiscord.png')).convert_alpha()
 CLICKER_IMAGE = pygame.transform.smoothscale(CLICKER_IMAGE, CLICKER_IMAGE_SIZE)
 CLICKER_BUTTON_LOCATION = (400, 200)
-SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path, 'shadow.png')).convert_alpha()
+SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path_buttons, 'shadow.png')).convert_alpha()
 SHADOW_IMAGE = pygame.transform.smoothscale(SHADOW_IMAGE, (210, 210))
-NOT_SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path, 'not_shadow.png')).convert_alpha()
+NOT_SHADOW_IMAGE = pygame.image.load(os.path.join(dir_path_buttons, 'not_shadow.png')).convert_alpha()
 NOT_SHADOW_IMAGE = pygame.transform.smoothscale(NOT_SHADOW_IMAGE, (210, 210))
 
 TIER_IMAGE_SIZE = (100, 100)
-TIER_ONE = pygame.image.load(os.path.join(dir_path, 'tier_1.png')).convert_alpha()
-TIER_TWO = pygame.image.load(os.path.join(dir_path, 'tier_2.png')).convert_alpha()
-TIER_THREE = pygame.image.load(os.path.join(dir_path, 'tier_3.png')).convert_alpha()
-TIER_FOUR = pygame.image.load(os.path.join(dir_path, 'tier_4.png')).convert_alpha()
-TIER_FIVE = pygame.image.load(os.path.join(dir_path, 'tier_5.png')).convert_alpha()
-TIER_SIX = pygame.image.load(os.path.join(dir_path, 'tier_6.png')).convert_alpha()
-TIER_SEVEN = pygame.image.load(os.path.join(dir_path, 'tier_7.png')).convert_alpha()
-TIER_EIGHT = pygame.image.load(os.path.join(dir_path, 'tier_8.png')).convert_alpha()
-TIER_NINE = pygame.image.load(os.path.join(dir_path, 'tier_9.png')).convert_alpha()
-TIER_TEN = pygame.image.load(os.path.join(dir_path, 'tier_10.png')).convert_alpha()
-TIER_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_shadow.png')).convert_alpha()
-TIER_NOT_SHADOW = pygame.image.load(os.path.join(dir_path, 'tier_not_shadow.png')).convert_alpha()
-TIER_LOCKED = pygame.image.load(os.path.join(dir_path, 'tier_locked.png')).convert_alpha()
+TIER_ONE = pygame.image.load(os.path.join(dir_path_buttons, 'tier_1.png')).convert_alpha()
+TIER_TWO = pygame.image.load(os.path.join(dir_path_buttons, 'tier_2.png')).convert_alpha()
+TIER_THREE = pygame.image.load(os.path.join(dir_path_buttons, 'tier_3.png')).convert_alpha()
+TIER_FOUR = pygame.image.load(os.path.join(dir_path_buttons, 'tier_4.png')).convert_alpha()
+TIER_FIVE = pygame.image.load(os.path.join(dir_path_buttons, 'tier_5.png')).convert_alpha()
+TIER_SIX = pygame.image.load(os.path.join(dir_path_buttons, 'tier_6.png')).convert_alpha()
+TIER_SEVEN = pygame.image.load(os.path.join(dir_path_buttons, 'tier_7.png')).convert_alpha()
+TIER_EIGHT = pygame.image.load(os.path.join(dir_path_buttons, 'tier_8.png')).convert_alpha()
+TIER_NINE = pygame.image.load(os.path.join(dir_path_buttons, 'tier_9.png')).convert_alpha()
+TIER_TEN = pygame.image.load(os.path.join(dir_path_buttons, 'tier_10.png')).convert_alpha()
+TIER_SHADOW = pygame.image.load(os.path.join(dir_path_buttons, 'tier_shadow.png')).convert_alpha()
+TIER_NOT_SHADOW = pygame.image.load(os.path.join(dir_path_buttons, 'tier_not_shadow.png')).convert_alpha()
+TIER_LOCKED = pygame.image.load(os.path.join(dir_path_buttons, 'tier_locked.png')).convert_alpha()
 
 MENU_IMAGE_SIZE = (150, 100)
-PLAY = pygame.image.load(os.path.join(dir_path, 'play.png')).convert_alpha()
-RESUME = pygame.image.load(os.path.join(dir_path, 'resume.png')).convert_alpha()
-SAVE = pygame.image.load(os.path.join(dir_path, 'save.png')).convert_alpha()
-LOAD = pygame.image.load(os.path.join(dir_path, 'load.png')).convert_alpha()
-QUIT = pygame.image.load(os.path.join(dir_path, 'quit.png')).convert_alpha()
-MENU_SHADOW = pygame.image.load(os.path.join(dir_path, 'menu_shadow.png')).convert_alpha()
-MENU_NOT_SHADOW = pygame.image.load(os.path.join(dir_path, 'menu_not_shadow.png')).convert_alpha()
+PLAY = pygame.image.load(os.path.join(dir_path_buttons, 'play.png')).convert_alpha()
+RESUME = pygame.image.load(os.path.join(dir_path_buttons, 'resume.png')).convert_alpha()
+SAVE = pygame.image.load(os.path.join(dir_path_buttons, 'save.png')).convert_alpha()
+LOAD = pygame.image.load(os.path.join(dir_path_buttons, 'load.png')).convert_alpha()
+QUIT = pygame.image.load(os.path.join(dir_path_buttons, 'quit.png')).convert_alpha()
+MENU_SHADOW = pygame.image.load(os.path.join(dir_path_buttons, 'menu_shadow.png')).convert_alpha()
+MENU_NOT_SHADOW = pygame.image.load(os.path.join(dir_path_buttons, 'menu_not_shadow.png')).convert_alpha()
 
 TITLE = pygame.image.load(os.path.join(dir_path, 'title.png')).convert_alpha()
 BUTTON_CLICK_SOUND = pygame.mixer.Sound(os.path.join(dir_path, 'click_sound.wav'))
@@ -63,7 +65,86 @@ BACKGROUND_IMAGE = pygame.transform.smoothscale(BACKGROUND_IMAGE, (1050, 850))
 INFO_BAR_IMAGE = pygame.image.load(os.path.join(dir_path, 'info_bar.png')).convert_alpha()
 
 
-def menu_draw(buttonlist, images_list=None):
+def game_menu_window_draw(buttonlist, background_image):
+    WINDOW.blit(background_image, (0, 0))
+    for button in buttonlist:
+        WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
+        WINDOW.blit(button.current_surface, (button.current_x, button.current_y))
+
+    pygame.display.update()
+
+
+def game_menu(screenshot_path):
+    run = True
+    quit = False
+    menu_buttons_list = []
+
+    resume_button = b.Button(MENU_IMAGE_SIZE, (225, 550), RESUME, MENU_SHADOW, MENU_NOT_SHADOW)
+    save_button = b.Button(MENU_IMAGE_SIZE, (425, 550), SAVE, MENU_SHADOW, MENU_NOT_SHADOW)
+    quit_button = b.Button(MENU_IMAGE_SIZE, (625, 550), QUIT, MENU_SHADOW, MENU_NOT_SHADOW)
+
+    menu_buttons_list.append(resume_button)
+    menu_buttons_list.append(save_button)
+    menu_buttons_list.append(quit_button)
+
+    image = Image.open(screenshot_path)
+    image = image.filter(ImageFilter.GaussianBlur(8))
+    image.save(screenshot_path)
+    image = pygame.image.load(screenshot_path).convert_alpha()
+
+    while run:
+        CLOCK.tick(FPS)
+        pos = pygame.mouse.get_pos()
+        mouse_button_state = pygame.mouse.get_pressed(num_buttons=3)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit = True
+                run = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if menu_buttons_list[0].is_over(pos):
+                    run = False
+
+                if menu_buttons_list[1].is_over(pos):
+                    pass
+
+                if menu_buttons_list[2].is_over(pos):
+                    quit = True
+                    run = False
+
+        for button in menu_buttons_list:
+            if button.is_over(pos):
+                button.current_shadow = button.not_shadow
+                if mouse_button_state[0]:
+                    button.current_surface = button.pressed_surface
+                    button.current_shadow = button.pressed_not_shadow
+                    button.current_x = button.x + button.shrink_distance
+                    button.current_y = button.y + button.shrink_distance
+                    button.is_pressed = True
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.not_shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
+            else:
+                if button.is_pressed and mouse_button_state[0]:
+                    button.current_shadow = button.pressed_shadow
+                else:
+                    button.current_surface = button.surface
+                    button.current_shadow = button.shadow
+                    button.current_x = button.x
+                    button.current_y = button.y
+                    button.is_pressed = False
+
+        game_menu_window_draw(menu_buttons_list, image)
+    os.remove(screenshot_path)
+    return quit
+
+
+
+def start_window_draw(buttonlist, images_list=None):
     WINDOW.fill(COLOUR)
     for button in buttonlist:
         WINDOW.blit(button.current_shadow, (button.current_x - 5, button.current_y - 5))
@@ -101,8 +182,8 @@ def start_menu():
                 if menu_buttons_list[0].is_over(pos):
                     run = False
 
-                if menu_buttons_list[0].is_over(pos):
-                    run = False
+                if menu_buttons_list[1].is_over(pos):
+                    pass
 
                 if menu_buttons_list[2].is_over(pos):
                     quit = True
@@ -135,7 +216,7 @@ def start_menu():
 
         images_list = [(TITLE, (125, 50))]
 
-        menu_draw(menu_buttons_list, images_list)
+        start_window_draw(menu_buttons_list, images_list)
     if not quit:
         main()
     else:
@@ -252,6 +333,13 @@ def main():
                                 print(generator_list[i - 1].message)
                             else:
                                 print(f"this costs {generator_list[i - 1].cost}")
+
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_ESCAPE] or not pygame.key.get_focused():
+            screenshot_path = os.path.join(dir_path, 'temp.png')
+            pygame.image.save(WINDOW, screenshot_path)
+            if game_menu(screenshot_path):
+                run = False
 
         if members >= 10 and button_list[1].locked:
             button_list[1].unlock()
